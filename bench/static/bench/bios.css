@@ -1,0 +1,75 @@
+/* BIOS/Terminal style UI */
+
+body {
+  background-color: #000;
+  color: #0f0;
+  font-family: "Courier New", monospace;
+  font-size: 16px;
+  margin: 20px;
+}
+
+h1, h2, h3 {
+  color: #0f0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 2px solid #0f0;
+  padding-bottom: 5px;
+}
+
+a {
+  color: #0f0;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+form {
+  background-color: #111;
+  border: 2px solid #0f0;
+  padding: 20px;
+  margin-bottom: 20px;
+  width: 400px;
+}
+
+input, select, button {
+  background-color: #000;
+  color: #0f0;
+  border: 1px solid #0f0;
+  padding: 5px;
+  font-family: "Courier New", monospace;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+button {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #0f0;
+  color: #000;
+}
+
+pre {
+  background-color: #111;
+  border: 2px solid #0f0;
+  padding: 10px;
+  overflow-x: auto;
+}
+
+.bios-panel {
+  border: 2px solid #0f0;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #111;
+}
+
+.blink {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}

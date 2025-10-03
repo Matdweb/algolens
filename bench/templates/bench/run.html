@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AlgoLens BIOS</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'bench/bios.css' %}">
+</head>
+<body>
+  <body>
+  <h1>AlgoLens BIOS <span class="blink">_</span></h1>
+
+  <div style="margin-bottom:12px;">
+    {% if user.is_authenticated %}
+      Welcome, {{ user.username }} | <a href="{% url 'logout' %}">[ Logout ]</a> | <a href="{% url 'bench:history' %}">[ History ]</a> | <a href="/admin/">[ Admin ]</a>
+    {% else %}
+      <a href="{% url 'login' %}">[ Login ]</a> | <a href="{% url 'bench:signup' %}">[ Signup ]</a>
+    {% endif %}
+  </div>
+
+  <div class="bios-panel">
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">[ Run Benchmark ]</button>
+    </form>
+  </div>
+  
+  <p>Press <span class="blink">Enter</span> to continue...</p>
+</body>
+</html>

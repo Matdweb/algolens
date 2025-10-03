@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AlgoLens BIOS - Logout</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'bench/bios.css' %}">
+</head>
+<body>
+  <h1>Logout <span class="blink">_</span></h1>
+  <div class="bios-panel">
+    <p>You have been logged out successfully.</p>
+  </div>
+  <p><a href="{% url 'bench:run' %}">[ Back to Home ]</a></p>
+</body>
+</html>

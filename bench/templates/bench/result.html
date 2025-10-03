@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AlgoLens BIOS - Results</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'bench/bios.css' %}">
+</head>
+<body>
+  <h1>Results — {{ algorithm }} <span class="blink">_</span></h1>
+  <div class="bios-panel">
+    {{ plot_div|safe }}
+  </div>
+
+  <div class="bios-panel">
+    <h2>Raw Benchmark Data</h2>
+    <pre>
+{% for r in results %}
+n={{ r.n }} avg={{ r.avg|floatformat:6 }}s median={{ r.median|floatformat:6 }}s
+{% endfor %}
+    </pre>
+  </div>
+
+  <div class="bios-panel">
+  {{ plot_div|safe }}
+</div>
+
+{% if saved %}
+  <div class="bios-panel">
+    <strong>Saved ✅</strong> — benchmark stored in your history.
+  </div>
+{% endif %}
+
+  <a href="{% url 'bench:run' %}">[ Run Another Benchmark ]</a>
+</body>
+</html>

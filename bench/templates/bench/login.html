@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AlgoLens BIOS - Login</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'bench/bios.css' %}">
+</head>
+<body>
+  <h1>Login <span class="blink">_</span></h1>
+  <div class="bios-panel">
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">[ Login ]</button>
+    </form>
+  </div>
+  <a href="{% url 'bench:run' %}">[ Back ]</a>
+</body>
+</html>
