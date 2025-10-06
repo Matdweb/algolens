@@ -21,7 +21,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', auth_views.LoginView.as_view(template_name='bench/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='bench/logout.html'), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', include('bench.urls', namespace='bench')),
 ]
 

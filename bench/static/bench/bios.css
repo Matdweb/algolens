@@ -73,3 +73,24 @@ pre {
 @keyframes blink {
   50% { opacity: 0; }
 }
+
+#logout-form {
+  display: inline;
+  margin: 0 6px; 
+}
+
+#logout-form .header-option {
+  background: none;
+  color: #0f0;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+#logout-form button:hover {
+  text-decoration: underline;
+}
+

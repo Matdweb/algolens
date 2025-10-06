@@ -10,13 +10,18 @@
   <body>
   <h1>AlgoLens BIOS <span class="blink">_</span></h1>
 
-  <div style="margin-bottom:12px;">
+  <form id="logout-form" method="post" action="{% url 'logout' %}" style="border: none; background: none; width: 100%; padding: 0;">
+  <div>
     {% if user.is_authenticated %}
-      Welcome, {{ user.username }} | <a href="{% url 'logout' %}">[ Logout ]</a> | <a href="{% url 'bench:history' %}">[ History ]</a> | <a href="/admin/">[ Admin ]</a>
-    {% else %}
-      <a href="{% url 'login' %}">[ Login ]</a> | <a href="{% url 'bench:signup' %}">[ Signup ]</a>
-    {% endif %}
-  </div>
+      Welcome, {{ user.username }} |
+        {% csrf_token %}
+        <button type="submit" style="width: unset; padding: 0; font-size: 16px; border: none;">[ Logout ]</button>
+        | <a href="{% url 'bench:history' %}">[ History ]</a> | <a href="/admin/">[ Admin ]</a>
+        {% else %}
+        <a href="{% url 'login' %}">[ Login ]</a> | <a href="{% url 'bench:signup' %}">[ Signup ]</a>
+        {% endif %}
+      </div>
+    </form>
 
   <div class="bios-panel">
     <form method="post">
