@@ -96,8 +96,16 @@ def run_view(request):
                 title=f'Benchmark: {dict(ALGO_CHOICES)[alg]}',
                 xaxis_title='n (input size)',
                 yaxis_title='time (seconds, avg)',
-                template='plotly_white'
+                paper_bgcolor='#000',
+                plot_bgcolor='#000',
+                font=dict(family='Courier New, monospace', color='#0f0', size=14),
+                xaxis=dict(color='#0f0', gridcolor='#0a0', zerolinecolor='#0f0'),
+                yaxis=dict(color='#0f0', gridcolor='#0a0', zerolinecolor='#0f0'),
+                legend=dict(font=dict(color='#0f0')),
             )
+            for trace in fig.data:
+                trace.line.color = '#0f0'
+                trace.marker.color = '#0f0'
 
             plot_div = fig.to_html(full_html=False, include_plotlyjs='cdn')
 
