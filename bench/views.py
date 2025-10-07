@@ -17,16 +17,26 @@ ALGO_CHOICES = [
     ('merge', 'Merge sort (O(n log n))'),
     ('quick', 'Quick sort (avg O(n log n))'),
     ('linear', 'Linear search (O(n))'),
-    ('binary', 'Binary search (O(log n))'),  # will use sorted arrays
+    ('binary', 'Binary search (O(log n))'),  # will use sorted 
+    ('custom', 'Custom Code')
 ]
 
 class RunForm(forms.Form):
     algorithm = forms.ChoiceField(choices=ALGO_CHOICES)
-    sizes = forms.CharField(
-        initial='100,500,1000',
-        help_text='Comma-separated sizes, e.g. 100,500,1000'
-    )
+    sizes = forms.CharField(initial='100,500,1000', help_text='Comma-separated sizes')
     repeats = forms.IntegerField(initial=3, min_value=1, max_value=10)
+    custom_code = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'rows': 10,
+            'cols': 45,
+            'placeholder': 'Define your function:\ndef custom_algo(arr):\n    # Your code here\n',
+            'style': 'font-family: monospace; background: none; color: #0f0;',
+        }),
+        required=False,
+        help_text='Define a function def custom_algo(arr): ...',
+        initial='def custom_algo(arr):\n    # Your code here\n'
+    )
+
 
 def run_view(request):
     saved = False
@@ -63,6 +73,47 @@ def run_view(request):
                 gen = gen_random_list
                 theory = lambda n: math.log(n, 2) if n > 0 else 0
                 theory_label = 'O(log n)'
+            elif alg == 'custom':
+                code = form.cleaned_data['custom_code']
+                # minimal sanitization: disallow imports and obvious system calls
+                forbidden = ['import', 'os', 'sys', 'subprocess', 'open', 'exec', 'eval']
+                if any(word in code for word in forbidden):
+                    return render(request, 'bench/run.html', {
+                        'form': form,
+                        'error': 'Unsafe code detected: forbidden keywords.'
+                    })
+
+                # Provide a very small, safe set of builtins so user code can use print(), len(), etc.
+                safe_builtins = {
+                    'print': print,
+                    'len': len,
+                    'range': range,
+                    'min': min,
+                    'max': max,
+                    'sum': sum,
+                    'enumerate': enumerate,
+                    'abs': abs,
+                    'sorted': sorted,
+                }
+
+                local_env = {}
+                try:
+                    # Exec with restricted builtins to allow harmless helpers like print()
+                    exec(code, {'__builtins__': safe_builtins}, local_env)
+                    func = local_env.get('custom_algo')
+                    if not callable(func):
+                        return render(request, 'bench/run.html', {
+                            'form': form,
+                            'error': 'You must define a function named custom_algo(arr).'
+                        })
+                    gen = gen_random_list
+                    theory = lambda n: n  # default placeholder
+                    theory_label = 'Custom'
+                except Exception as e:
+                    return render(request, 'bench/run.html', {
+                        'form': form,
+                        'error': f'Code failed to compile: {e}'
+                    })
             else:
                 return render(request, 'bench/run.html', {'form': form, 'error': 'Unknown algorithm'})
 
@@ -93,7 +144,7 @@ def run_view(request):
                 fig.add_trace(go.Scatter(x=ns, y=scaled, mode='lines', name=theory_label, line=dict(dash='dash')))
 
             fig.update_layout(
-                title=f'Benchmark: {dict(ALGO_CHOICES)[alg]}',
+                title=f'Benchmark: {dict(ALGO_CHOICES)[alg]}', 
                 xaxis_title='n (input size)',
                 yaxis_title='time (seconds, avg)',
                 paper_bgcolor='#000',
@@ -127,7 +178,7 @@ def run_view(request):
             return render(request, 'bench/result.html', {
                 'plot_div': plot_div,
                 'results': results,
-                'algorithm': dict(ALGO_CHOICES)[alg],
+                'algorithm': dict(ALGO_CHOICES)[alg], # need a fix here for 'custom'
                 'saved': saved
             })
     else:
